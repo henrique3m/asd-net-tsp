@@ -75,7 +75,6 @@ namespace Estacionamento.Negocio
         {
             var permanencia = saida.Subtract(entrada);
             return Math.Round((permanencia.TotalMinutes / 3), 2); // 3 reais é o valor mínimo
-        }
-
+        }       
     }
 }
