@@ -8,32 +8,27 @@ namespace Estacionamento.Negocio
 {
     public class CommandCheckout : ICommand
     {
-        public Object Run(Object Param)
+        Estacionamento estacionamento = null;
+        public CommandCheckout()
         {
-            Validate(((CarroDTO)Param).GetPlaca());
-            DateTime horaEntrada = Estacionamento.GetInstance().GetTime(((CarroDTO)Param).GetPlaca());
-
-            Estacionamento.GetInstance().RemovePlaca(((CarroDTO)Param).GetPlaca());
-
-            return CalcularValorEstacionamento(horaEntrada, DateTime.Now);
-
+            estacionamento = Estacionamento.GetInstance();
         }
 
-        public bool Validate(Object Param)
+        public Object Run(CarroDTO Param)
         {
-            if (String.Equals(((CarroDTO)Param).GetPlaca().Trim(), string.Empty))
+            Validate(Param);         
+            return estacionamento.SaidaCarro(Param);
+        }
+
+        public bool Validate(CarroDTO Param)
+        {
+            if (String.Equals(Param.GetPlaca().Trim(), string.Empty))
                 throw new Exception(String.Format("Placa inválida.", Param));
 
-            if (!Estacionamento.GetInstance().ContemPlaca(((CarroDTO)Param).GetPlaca()))
-                throw new Exception(String.Format("Carro placa '{0}' NÃO existe!", Param));
+            if (!estacionamento.ContemCarro(Param))
+                throw new Exception(String.Format("Carro placa '{0}' NÃO existe!", Param.GetPlaca()));
 
             return true;
-        }
-
-        private double CalcularValorEstacionamento(DateTime entrada, DateTime saida)
-        {
-            var permanencia = saida.Subtract(entrada);
-            return Math.Round((permanencia.TotalMinutes / 3), 2); // 3 reais é o valor mínimo
         }
     }
 }

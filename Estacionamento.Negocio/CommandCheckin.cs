@@ -8,23 +8,30 @@ namespace Estacionamento.Negocio
 {
     public class CommandCheckin : ICommand
     {
-        public Double Run(String Param)
+
+        Estacionamento estacionamento = null;
+        public CommandCheckin()
         {
-            Validate(Param);
-            Estacionamento.GetInstance().AddPlaca(Param);
-            return 0.0;
+            estacionamento = Estacionamento.GetInstance();
         }
 
-        public bool Validate(String Param)
+        public Object Run(CarroDTO Param)
         {
-            if (String.Equals(Param.Trim(), string.Empty))
+            Validate(Param);
+            estacionamento.EntradaCarro(Param);
+            return true;
+        }
+
+        public bool Validate(CarroDTO Param)
+        {
+            if (String.Equals(Param.GetPlaca().Trim(), string.Empty))
                 throw new Exception(String.Format("Placa inválida.", Param));
 
-            if (Estacionamento.GetInstance().EstacionamentoCheio())
+            if (estacionamento.Cheio())
                 throw new Exception("Estacionamento cheio!");
 
-            if (Estacionamento.GetInstance().ContemPlaca(Param))
-                throw new Exception(String.Format("Carro placa '{0} já existe!", Param));
+            if (estacionamento.ContemCarro(Param))
+                throw new Exception(String.Format("Carro placa '{0} já existe!", Param.GetPlaca()));
 
             return true;
         }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Estacionamento.Negocio
 {
-    class Estacionamento
+    public class Estacionamento
     {
         private const int VAGAS_TOTAIS = 15;
-        private static IDictionary<string, DateTime> _estacionamento = new Dictionary<string, DateTime>();
+        private static IDictionary<String, DateTime> _estacionamento = new Dictionary<String, DateTime>();
         private static Estacionamento Instance = null;
 
         public static Estacionamento GetInstance()
@@ -21,38 +21,31 @@ namespace Estacionamento.Negocio
             return Instance;
         }
 
-        public int TotalVagas()
-        {
-            return VAGAS_TOTAIS;
-        }
-
-        public int CountVagas()
-        {
-            return _estacionamento.Count;
-        }
-
-        public bool EstacionamentoCheio()
+        public bool Cheio()
         {
             return _estacionamento.Count == VAGAS_TOTAIS;
         }
 
-        public bool ContemPlaca(String placa) {
-            return _estacionamento.ContainsKey(placa);
+        public bool ContemCarro(CarroDTO carro) {
+            return _estacionamento.ContainsKey(carro.GetPlaca());
         }   
 
-        public void AddPlaca(String placa)
-        {
-            _estacionamento.Add(placa, DateTime.Now);
+        public void EntradaCarro(CarroDTO carro)
+        {            
+            _estacionamento.Add(carro.GetPlaca(), DateTime.Now);
         }
 
-        public void RemovePlaca(String placa)
+        public double SaidaCarro(CarroDTO carro)
         {
-            _estacionamento.Remove(placa);
+            DateTime horaEntrada = _estacionamento[carro.GetPlaca()];
+            _estacionamento.Remove(carro.GetPlaca());
+            return CalculaValor(horaEntrada);
         }
 
-        public DateTime GetTime(String placa)
-        {
-            return _estacionamento[placa];
+        private double CalculaValor(DateTime HoraEntrada)
+        {            
+            var permanencia = DateTime.Now.Subtract(HoraEntrada);
+            return Math.Round((permanencia.TotalMinutes / 3), 2); // 3 reais é o valor mínimo
         }
     }
 }

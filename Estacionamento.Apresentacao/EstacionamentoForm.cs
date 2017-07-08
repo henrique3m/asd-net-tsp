@@ -26,7 +26,7 @@ namespace Estacionamento.Apresentacao
             {
 
                 CommandCheckin ck = new CommandCheckin();
-                ck.Run(placa);
+                ck.Run(new CarroDTO(placa));
 
                 MessageBox.Show(String.Format("Placa '{0}' adicionada.", placa));
                 textBox1.Text = string.Empty;
@@ -45,8 +45,7 @@ namespace Estacionamento.Apresentacao
             try
             {
                 CommandCheckout ck = new CommandCheckout();
-                ck.Run(placa);
-                var valor = Operacoes.Checkout(placa);
+                var valor = ck.Run(new CarroDTO(placa));
 
                 MessageBox.Show(String.Format("Placa '{0}' valor de R${1}.", placa, valor));
                 textBox1.Text = string.Empty;

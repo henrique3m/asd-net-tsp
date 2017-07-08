@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Estacionamento.Negocio
 {
-    public class CarroDTO
+    public class CarroDTO:IComparable
     {
         private String Placa;
         
@@ -14,6 +14,7 @@ namespace Estacionamento.Negocio
         {
             this.Placa = Param;
         }
+
         public string GetPlaca()
         {
             return Placa;
@@ -22,6 +23,11 @@ namespace Estacionamento.Negocio
         public void SetPlaca(string placa)
         {
             this.Placa = placa;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return ((CarroDTO)obj).GetPlaca().Equals(this.Placa) ? 1 : 0;
         }
     }
 }

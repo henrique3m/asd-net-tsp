@@ -8,7 +8,7 @@ namespace Estacionamento.Negocio
 {
     interface ICommand
     {
-        Object Run(Object  Param);
-        bool Validate(Object Param);
+        Object Run(CarroDTO  Param);
+        bool Validate(CarroDTO Param);
     }
 }
