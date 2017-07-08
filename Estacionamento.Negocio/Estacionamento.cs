@@ -9,7 +9,7 @@ namespace Estacionamento.Negocio
     public class Estacionamento
     {
         private const int VAGAS_TOTAIS = 15;
-        private static IDictionary<String, DateTime> _estacionamento = new Dictionary<String, DateTime>();
+        private static IDictionary<CarroDTO, DateTime> _estacionamento = new Dictionary<CarroDTO, DateTime>();
         private static Estacionamento Instance = null;
 
         public static Estacionamento GetInstance()
@@ -27,18 +27,18 @@ namespace Estacionamento.Negocio
         }
 
         public bool ContemCarro(CarroDTO carro) {
-            return _estacionamento.ContainsKey(carro.GetPlaca());
+            return _estacionamento.ContainsKey(carro);
         }   
 
         public void EntradaCarro(CarroDTO carro)
         {            
-            _estacionamento.Add(carro.GetPlaca(), DateTime.Now);
+            _estacionamento.Add(carro, DateTime.Now);
         }
 
         public double SaidaCarro(CarroDTO carro)
         {
-            DateTime horaEntrada = _estacionamento[carro.GetPlaca()];
-            _estacionamento.Remove(carro.GetPlaca());
+            DateTime horaEntrada = _estacionamento[carro];
+            _estacionamento.Remove(carro);
             return CalculaValor(horaEntrada);
         }
 
